@@ -2,8 +2,11 @@ package com.bridgelabz.bookstoreapp.controller;
 
 import com.bridgelabz.bookstoreapp.dto.ResponseDTO;
 
+import com.bridgelabz.bookstoreapp.dto.UserDTO;
+import com.bridgelabz.bookstoreapp.dto.UserLoginDTO;
 import com.bridgelabz.bookstoreapp.service.EmailSenderService;
 
+import com.bridgelabz.bookstoreapp.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ public class UserController {
 
     @Autowired
     private EmailSenderService senderService;
+
+    @Autowired
+    private UserRegistrationService userRegistrationService;
 
     /**
      * Checking Api working or not
@@ -58,6 +64,35 @@ public class UserController {
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
 
+    /**
+     * to resgister the new user
+     * @param userDTO
+     * @return
+     */
+    @PostMapping("/register")
+    public ResponseEntity<ResponseDTO> registerUserInBookStore(@RequestBody UserDTO userDTO) {
+        ResponseDTO responseDTO = userRegistrationService.registerUserInBookStore(userDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
+    }
+
+    /**
+     * to verify the register email by otp
+     */
+    @GetMapping("/verify/email/{otp}")
+    public ResponseEntity<ResponseDTO> verifyEmailUsingOtp(@PathVariable Long otp) {
+        ResponseDTO responseDTO = userRegistrationService.verifyEmailUsingOtp(otp);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
+
+    /**
+     * To login by Resgister gmail
+     */
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDTO> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+        ResponseDTO responseDTO = userRegistrationService.loginUser(userLoginDTO);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+
+    }
 
 }
 
