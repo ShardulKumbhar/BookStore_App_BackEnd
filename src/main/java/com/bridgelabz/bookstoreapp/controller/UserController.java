@@ -18,6 +18,10 @@ public class UserController {
     @Autowired
     private EmailSenderService senderService;
 
+    /**
+     * Checking Api working or not
+     * @return
+     */
     @GetMapping({"/hello", "/"})
     public String welcomeApi() {
         return "Hello Welcome To BookStore App";
@@ -39,6 +43,11 @@ public class UserController {
     }
 
 
+    /**
+     * Attach any pdf or any attachment
+     * @return
+     * @throws MessagingException
+     */
     @GetMapping("/emailAttached")
     public ResponseEntity<ResponseDTO> sendEmailWithAttachment() throws MessagingException {
         senderService.sendEmailWithAttachment("shardulkumbhar99@gmail.com",
