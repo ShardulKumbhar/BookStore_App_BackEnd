@@ -10,7 +10,11 @@ import java.util.UUID;
 @Service
 public class TokenGenerator {
 
-
+    /**
+     * Unique token generation
+     * @param userDetails
+     * @return
+     */
     public String generateLoginToken(UserData userDetails) {
 
         long currentTime = System.currentTimeMillis();
