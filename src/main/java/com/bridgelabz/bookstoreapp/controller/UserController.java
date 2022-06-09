@@ -146,5 +146,15 @@ public class UserController {
     }
 
 
-
+    /**
+     * @param email
+     * @return
+     * @Purpose get resetpassword link
+     */
+    @PostMapping("/forgot/password")
+    public ResponseEntity<ResponseDTO> getResetPassword(@RequestParam String email) {
+        String link = userRegistrationService.resetPasswordLink(email);
+        ResponseDTO responseDTO = new ResponseDTO("link for reset password", link);
+        return new ResponseEntity<>(responseDTO, HttpStatus.OK);
+    }
 }
