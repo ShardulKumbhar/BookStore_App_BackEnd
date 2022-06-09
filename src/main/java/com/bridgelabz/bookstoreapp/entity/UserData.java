@@ -45,7 +45,7 @@ public class UserData {
     public UserData() {
     }
 
-    private void updateUserData(UserDTO userDTO) {
+    public void updateUserData(UserDTO userDTO) {
         this.firstName = userDTO.getFirstName();
         this.lastName = userDTO.getLastName();
         this.kyc = userDTO.getKyc();

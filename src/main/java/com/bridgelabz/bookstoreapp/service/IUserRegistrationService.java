@@ -1,5 +1,4 @@
-package Interface;
-
+package com.bridgelabz.bookstoreapp.service;
 
 import com.bridgelabz.bookstoreapp.dto.ResponseDTO;
 import com.bridgelabz.bookstoreapp.dto.UserDTO;
@@ -11,15 +10,19 @@ import java.util.List;
 
 public interface IUserRegistrationService {
 
-    ResponseDTO registerUserInBookStore(UserDTO userDTO);
+    UserData registerUserInBookStore(UserDTO userDTO);
 
     ResponseDTO loginUser(UserLoginDTO userLoginDTO);
 
     ResponseDTO verifyEmailUsingOtp(Long otp);
 
     String deleteUserById(long id);
-
     UserData findUserById(long id);
 
     List<UserData> findAllUsers();
+
+
+    UserData updateUserbyId(Long id, UserDTO userDTO);
+
+    String resetPasswordLink(String email);
 }
