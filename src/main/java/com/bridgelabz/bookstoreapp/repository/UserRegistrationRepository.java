@@ -6,9 +6,18 @@ import com.bridgelabz.bookstoreapp.entity.UserData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.io.Serializable;
+import java.util.Optional;
+import java.util.OptionalInt;
+import java.util.UUID;
+
 public interface UserRegistrationRepository extends JpaRepository<UserData, Long> {
 
-@Query(value = "select * from user_registration where email=:email",nativeQuery = true)
+    @Query(value = "select * from user_registration where email=:email",nativeQuery = true)
     public UserData findUserDataByEmail(String email);
+
+    @Query(value = "select * from user_registration where email=:email",nativeQuery = true)
+    public Optional<UserData> findUserDataByEmailId(String email);
+
 
 }

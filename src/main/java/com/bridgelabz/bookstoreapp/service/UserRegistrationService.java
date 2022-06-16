@@ -8,7 +8,6 @@ import com.bridgelabz.bookstoreapp.exception.UserException;
 import com.bridgelabz.bookstoreapp.repository.UserRegistrationRepository;
 import com.bridgelabz.bookstoreapp.util.OtpGenerator;
 import com.bridgelabz.bookstoreapp.util.TokenGenerator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -173,23 +172,35 @@ public class UserRegistrationService implements IUserRegistrationService {
     }
 
     /**
-     * @purpose to generate reset password link
      * @param email to which password has to reset
-     * @return  returns message with email address
+     * @return returns message with email address
+     * @purpose to generate reset password link
      */
     @Override
     public String resetPasswordLink(String email) {
         UserData user = userRegistrationRepository.findUserDataByEmail(email);
-        if(user == null){
-            throw new UserException("Email Not found",UserException.ExceptionType.EMAIL_NOT_FOUND);
+        if (user == null) {
+            throw new UserException("Email Not found", UserException.ExceptionType.EMAIL_NOT_FOUND);
         }
         String token = tokenGenerator.generateLoginToken(user);
         String urlToken = "Click on below link to Reset your Password \n" +
-                "http://localhost:8080/bookstoreApi/reset/password/"+token;
-        emailSenderService.sendEmail(user.getEmail(),"Reset Password",urlToken);
+                "http://localhost:8080/bookstoreApi/reset/password/" + token;
+        emailSenderService.sendEmail(user.getEmail(), "Reset Password", urlToken);
 
-        return "Reset Password Link Has Been Sent To Your Email Address : "+user.getEmail();
+        return "Reset Password Link Has Been Sent To Your Email Address : " + user.getEmail();
     }
 
 
+    @Override
+    public String resetPassword(String password, String urlToken) {
+        System.out.println(urlToken);
+        Long userId = tokenGenerator.decodeJWT(urlToken);
+        System.out.println(userId);
+        UserData user = userRegistrationRepository.findById(userId).orElseThrow(() -> new UserException("Invalid Password", UserException.ExceptionType.INVALID_DATA));
+        String encodePassword = bCryptPasswordEncoder.encode(password);
+        userData.setPassword(encodePassword);
+        userRegistrationRepository.save(userData);
+        return "Password Has Been Reset";
+
+    }
 }

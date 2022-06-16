@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/bookstoreApi")
 public class UserController {
@@ -157,4 +158,17 @@ public class UserController {
         ResponseDTO responseDTO = new ResponseDTO("link for reset password", link);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
     }
+        /**
+         * @Purpose reset new password
+         * @param password
+         * @param urlToken
+         * @return
+         */
+    @PostMapping("/reset/password")
+    public ResponseEntity<ResponseDTO> resetPassword(@RequestParam(name = "password") String password,@RequestParam(value = "token",defaultValue = "") String urlToken){
+        String resetPassword = userRegistrationService.resetPassword(password,urlToken);
+        ResponseDTO response = new ResponseDTO("password reset successful",resetPassword);
+        return new ResponseEntity(response,HttpStatus.OK);
+    }
+
 }

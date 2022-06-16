@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Table(name = "user_registration")
 public class UserData {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
@@ -23,10 +23,14 @@ public class UserData {
     private LocalDate dob;
     private String email;
     private String password;
-    private LocalDate createdDate;
-    private Boolean isVerified=false;
 
-    public UserData(Long id, String firstName, String lastName, String kyc, LocalDate dob, String email, String password, LocalDate createdDate, Boolean isVerified) {
+    private String role;
+
+
+    private LocalDate createdDate;
+    private Boolean isVerified = false;
+
+    public UserData(Long id, String firstName, String lastName, String kyc, String imageURL, LocalDate dob, String email, String password, LocalDate createdDate, Boolean isVerified,String role) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -35,6 +39,7 @@ public class UserData {
         this.email = email;
         this.password = password;
         this.createdDate = createdDate;
+        this.role = role;
         this.isVerified = isVerified;
     }
 
@@ -46,11 +51,12 @@ public class UserData {
     }
 
     public void updateUserData(UserDTO userDTO) {
-        this.firstName = userDTO.getFirstName();
-        this.lastName = userDTO.getLastName();
-        this.kyc = userDTO.getKyc();
-        this.dob = userDTO.getDob();
-        this.email = userDTO.getEmail();
-        this.password = userDTO.getPassword();
+        this.firstName = userDTO.firstName;
+        this.lastName = userDTO.lastName;
+        this.kyc = userDTO.kyc;
+        this.dob = userDTO.dob;
+        this.email = userDTO.email;
+        this.role = userDTO.role;
+        this.password = userDTO.password;
     }
 }
