@@ -27,5 +27,5 @@ public interface IUserRegistrationService {
     String resetPasswordLink(String email);
 
 
-    String resetPassword(String password, String urlToken);
+    String resetPassword(String password, String urlToken, String token);
 }

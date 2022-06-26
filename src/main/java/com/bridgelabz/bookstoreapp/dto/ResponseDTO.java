@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ResponseDTO {
+    private int status;
     private String message;
     private Object data;
 
@@ -15,5 +16,10 @@ public class ResponseDTO {
 
     public ResponseDTO() {
 
+    }
+    public ResponseDTO(int status, String message, Object data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
     }
 }

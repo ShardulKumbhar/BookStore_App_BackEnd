@@ -35,7 +35,7 @@ public class BookService implements IBookService {
 
     @Override
     public BookDetailsModel addBook(BookDTO bookDTO, String token) {
-        Long id = tokenGenerator.decodeJWT(token);
+        Long id = Long.valueOf(tokenGenerator.decodeJWT(token));
         UserData userData = userRegistrationRepository.findById(id)
                 .orElseThrow(() -> new UserException("User not found", UserException.ExceptionType.USER_NOT_FOUND));
         String userRole = userData.getRole();
@@ -108,5 +108,21 @@ public class BookService implements IBookService {
         return bookRepository.findById(bookId).orElseThrow(() -> new BookStoreException(BookStoreException.ExceptionTypes.BOOK_NOT_FOUND));
     }
 
+    @Override
+    public BookDetailsModel getFilterBooks(BookDTO bookName) {
+        return bookRepository.findByBookName(String.valueOf(bookName)).orElseThrow(()-> new BookStoreException(BookStoreException.ExceptionTypes.BOOK_NOT_FOUND));
+    }
+
+    public List<BookDetailsModel> searchByName(String name) {
+        String name1 = name.toLowerCase();
+//        List<BookDetailsModel> bookDetailsModels = bookRepository.findByKeyWord(name);
+        List<BookDetailsModel> bookDetailsModels = getAllBooks();
+        List<BookDetailsModel> collect = bookDetailsModels
+                .stream()
+                .filter(bookDetailsModel -> bookDetailsModel.getBookName().toLowerCase().contains(name1))
+                .collect(Collectors.toList());
+
+        return collect;
+    }
 
 }

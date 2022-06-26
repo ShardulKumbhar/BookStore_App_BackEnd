@@ -12,6 +12,9 @@ public class BookStoreException extends RuntimeException {
 
 
     public enum ExceptionTypes {
+
+        INVALID_ORDER("no such order found"),
+        NO_BOOKS_IN_CART("no product in cart"),
         USER_ALREADY_PRESENT("user Already present"),
         USER_NOT_FOUND("user not found"),
         INVALID_USER_ID("user id you have given is incorrect"),
@@ -20,6 +23,8 @@ public class BookStoreException extends RuntimeException {
         BOOK_NOT_FOUND("book is not found"),
         CART_NOT_PRESENT("invalid cart id"),
         NO_BOOKS_FOUND("no books available");
+
+
 
         public String errorMsg;
 

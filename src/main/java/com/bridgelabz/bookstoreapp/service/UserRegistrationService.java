@@ -178,29 +178,48 @@ public class UserRegistrationService implements IUserRegistrationService {
      */
     @Override
     public String resetPasswordLink(String email) {
-        UserData user = userRegistrationRepository.findUserDataByEmail(email);
-        if (user == null) {
-            throw new UserException("Email Not found", UserException.ExceptionType.EMAIL_NOT_FOUND);
+//       UserData userData = userRegistrationRepository.findUserDataByEmail(email);
+        UserData userData = userRegistrationRepository.findUserDataByEmailId(email)
+                .orElseThrow(()->new UserException("Email Not found",UserException.ExceptionType.EMAIL_NOT_FOUND));
+        if(userData == null){
+            throw new UserException("Email Not found",UserException.ExceptionType.EMAIL_NOT_FOUND);
         }
-        String token = tokenGenerator.generateLoginToken(user);
+        String token = tokenGenerator.generateLoginToken(userData);
         String urlToken = "Click on below link to Reset your Password \n" +
-                "http://localhost:8080/bookstoreApi/reset/password/" + token;
-        emailSenderService.sendEmail(user.getEmail(), "Reset Password", urlToken);
+                "http://localhost:8080/bookstoreApi/reset/password/"+token+
+                "\n The generated token is :  "+token;
+        emailSenderService.sendEmail(userData.getEmail(),"Reset Password",urlToken);
 
-        return "Reset Password Link Has Been Sent To Your Email Address : " + user.getEmail();
+        return "Reset Password Link Has Been Sent To Your Email Address : "+userData.getEmail();
     }
 
-
     @Override
-    public String resetPassword(String password, String urlToken) {
-        System.out.println(urlToken);
-        Long userId = tokenGenerator.decodeJWT(urlToken);
+    public String resetPassword(String enterPassword, String confirmPassword, String urlToken) {
+        String userId = String.valueOf(tokenGenerator.decodeJWT(urlToken));
         System.out.println(userId);
-        UserData user = userRegistrationRepository.findById(userId).orElseThrow(() -> new UserException("Invalid Password", UserException.ExceptionType.INVALID_DATA));
-        String encodePassword = bCryptPasswordEncoder.encode(password);
+        UserData userData = findUserById(Long.parseLong(userId));
+        boolean isPassword = enterPassword.equals(confirmPassword);
+        if(!isPassword){
+            throw new UserException("Both passwords must be same ",UserException.ExceptionType.PASSWORD_INVALID);
+        }
+        String encodePassword = bCryptPasswordEncoder.encode(confirmPassword);
         userData.setPassword(encodePassword);
         userRegistrationRepository.save(userData);
         return "Password Has Been Reset";
+    }
 
+
+    public String updatePassword(String existingPassword, String newPassword, String urlToken) {
+        String userId = String.valueOf(tokenGenerator.decodeJWT(urlToken));
+        System.out.println(userId);
+        UserData userData = findUserById(Long.parseLong(userId));
+        boolean isPassword = bCryptPasswordEncoder.matches(existingPassword,userData.getPassword());
+        if(!isPassword){
+            throw new UserException("Enter correct existing password",UserException.ExceptionType.PASSWORD_INVALID);
+        }
+        String encodePassword = bCryptPasswordEncoder.encode(newPassword);
+        userData.setPassword(encodePassword);
+        userRegistrationRepository.save(userData);
+        return "Password Has Been Reset";
     }
 }

@@ -59,4 +59,5 @@ public class UserData {
         this.role = userDTO.role;
         this.password = userDTO.password;
     }
+
 }

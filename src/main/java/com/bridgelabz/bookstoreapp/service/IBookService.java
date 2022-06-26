@@ -28,4 +28,8 @@ public interface IBookService {
     List<BookDetailsModel> getBooksByNewLaunch();
 
     BookDetailsModel getBookById(Long id);
+
+    BookDetailsModel getFilterBooks(BookDTO bookName);
+
+    List<BookDetailsModel> searchByName(String name);
 }
